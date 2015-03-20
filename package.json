@@ -1,0 +1,33 @@
+{
+  "name": "hmc5883l",
+  "version": "0.0.1",
+  "description": "node.js interface for hmc5883l compass sensor",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.12.2",
+    "socket.io": "^1.3.5",
+    "tsl2591": "^0.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seattleacademy/hmc5883l.git"
+  },
+  "dependencies": {
+    "i2c": "~0.1.4"
+  },
+  "keywords": [
+    "i2c",
+    "hmc5883l",
+    "sensor"
+  ],
+  "author": "Seattle Academy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seattleacademy/hmc5883l/issues"
+  },
+  "homepage": "https://github.com/seattleacademy/hmc5883l"
+}
