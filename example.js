@@ -1,15 +1,27 @@
-console.log("Start");
-var hmc5883l = require('hmc5883l');
-var compass = new hmc5883l({device: '/dev/i2c-1'});
-outCompass();
-function outCompass(){
-  compass.readXYZ(function(err, data) {
-      if (err) {
-          console.log(err);
-      }
-      else {
-          console.log(data);
-      }
+var hmc5883l = require('./hmc2.js');
+var math = require('mathjs');
+
+var xval = -1;
+var yval = -1;
+var zval = -1;
+
+var bearing = -1;
+
+hmc5883l.Initialize(function(err, data)
+{
+  hmc5883l.readX(function(err, data){
+    console.log("X value =", data);
+    xval = data;
   });
-  setTimeout(outCompass, 1000);
-}
+  hmc5883l.readY(function(err, data){
+    console.log("Y value =", data);
+    xval = data;
+  });
+  bearing = math.atan2(yval, xval) + .48;
+  if(bearing < 0)
+  {
+    bearing += 2 * math.pi;
+  }
+  bearing = bearing * (180 / math.pi);
+  console.log("Bearing =", bearing);
+});

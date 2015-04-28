@@ -1,5 +1,7 @@
 var i2c = require('i2c');
 
+var math = require('mathjs');
+
 //the address of the wire
 var HMC5883l_ADDR	= 0x1e;
 
@@ -28,14 +30,16 @@ var x_out = -1;
 var y_out = -1;
 var z_out = -1;
 
-var exports = module.exports = {};
+var bearing = -1;
+
+var exports = module.exports = {} ;
 var i2cdevice;
 
 exports.Initialize = function(Callback)
 {
     //sets up the device
     i2cdevice = new i2c(HMC5883l_ADDR, {device: '/dev/i2c-1'});
-
+    i2cdevice.setAddress(HMC5883l_ADDR);
     Callback();
 }
 
@@ -73,6 +77,43 @@ exports.readX = function(Callback)
     x_out = (data - x_offset+2) * scale;
 
     Callback(err, x_out);
-  }
+  });
 
+}
+exports.readY = function(Callback)
+{
+  ReadData(HMC5883l_DATA_X_MSB, 1, function(err, data)
+  {
+    y_out = (data - y_offset+2) * scale;
+
+    Callback(err, y_out);
+  });
+
+}
+exports.readZ = function(Callback)
+{
+  ReadData(HMC5883l_DATA_X_MSB, 1, function(err, data)
+  {
+    z_out = data * scale;
+
+    Callback(err, z_out);
+  });
+
+}
+
+exports.bearing = function(Callback)
+{
+  readX(function(err, data){
+    console.log(data);
+  });
+  readY(function(err, data){
+    console.log(data);
+  });
+  bearing = math.atan2(y_out, x_out) + .48;
+  if(bearing < 0)
+  {
+    bearing += 2 * math.pi;
+  }
+  bearing = bearing * (180 / math.pi);
+  Callback(bearing);
 }
