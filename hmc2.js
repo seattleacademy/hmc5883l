@@ -43,6 +43,24 @@ exports.Initialize = function(Callback)
     Callback();
 }
 
+exports.SetUp = function(Callback)
+{
+  console.log("Starting setup")
+  var bytes = [HMC5883l_CRA, 0x70];
+  WriteData(HMC5883l_WRITE, bytes, function(err)
+  {
+    bytes = [HMC5883l_CRB, 0xA0];
+    WriteData(HMC5883l_WRITE, bytes, function(err)
+    {
+      bytes = [HMC5883l_MODE, 0x00];
+      WriteData(HMC5883l_WRITE, bytes, function(err)
+      {
+        console.log("Successful setup");
+      });
+    });
+  });
+  Callback();
+}
 function ReadData(Register, Bytes, Callback)
 {
     i2cdevice.readBytes(Register, Bytes, function(err, data)
